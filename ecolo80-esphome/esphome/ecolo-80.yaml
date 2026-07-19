@@ -1,0 +1,71 @@
+esphome:
+  name: ecolo-80
+  friendly_name: ECOLO-80-HEATER
+  min_version: 2026.4.0
+  name_add_mac_suffix: false
+
+esp32:
+  variant: esp32
+  framework:
+    type: esp-idf
+    advanced:
+      minimum_chip_revision: "3.1"
+      sram1_as_iram: true
+
+external_components:
+  - source:
+      type: local
+      path: my_components
+    components:
+      - ecolo80
+
+logger:
+  level: DEBUG
+
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+button:
+  - platform: restart
+    name: "Ecolo Restart"
+
+ecolo80:
+  pin:
+    number: GPIO4
+    mode:
+      input: true
+      pullup: false
+      pulldown: false
+
+  transmit_pin:
+    number: GPIO18
+    mode:
+      output: true
+
+  power_switch:
+    name: "Ecolo Power"
+    icon: "mdi:power"
+
+  temperature_up:
+    name: "Ecolo Temperature Up"
+    icon: "mdi:chevron-up"
+
+  temperature_down:
+    name: "Ecolo Temperature Down"
+    icon: "mdi:chevron-down"
+
+  target_temperature:
+    name: "Ecolo Target Temperature"
+
+  current_temperature:
+    name: "Ecolo Water Temperature"
+
+  heating:
+    name: "Ecolo Heating"
+    icon: "mdi:fire"
