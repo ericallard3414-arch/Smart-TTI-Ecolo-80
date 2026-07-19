@@ -1,27 +1,35 @@
-# Contributing
+# Changelog
 
-Contributions are welcome.
+## [2.0.0] - 2026-07-19
 
-## Useful contributions
+### Production release
 
-- Testing on ECOLO-50, ECOLO-80, ECOLO-100, or related controllers
-- Defrost-state captures
-- Error-code captures
-- Fan and compressor state decoding
-- Documentation corrections
-- Cleaner hardware interfaces
-- PCB designs
+- Added explicit compatibility requirement for GUANGDONG CHICO CC207S-V2.1
+- Added Home Assistant ECOLO model dropdown
+- Added ECOLO 50, 65, 80, 100, and 120 selections
+- Added flash persistence for model selection
+- Added estimated current-consumption sensor
+- Added estimated power-consumption sensor
+- Added estimated daily energy sensor
+- Added estimated cumulative energy sensor
+- Added five-second periodic consumption refresh
+- Added immediate consumption updates when heating or model changes
+- Added professional project documentation
+- Declared the supported feature set production ready
 
-## Capture requirements
+### Core integration
 
-Please provide:
+- Stable two-way communication
+- Power ON/OFF
+- Temperature Up/Down
+- Water temperature
+- Target temperature
+- Heating ON/OFF binary sensor
+- Checksum validation
+- Transmit-echo verification
+- Command acknowledgement
+- Factory keypad compatibility
 
-1. Exact heat-pump model
-2. Controller or display revision
-3. Stable Packet A samples
-4. Stable Packet B samples
-5. What the heater was physically doing
-6. Whether the command came from the factory keypad or ESP32
-7. Any display message or error code
+## [1.0.0] - 2026-07-18
 
-Never include Wi-Fi credentials, API keys, private IP details, or other secrets.
+- Initial production ECOLO-80 integration

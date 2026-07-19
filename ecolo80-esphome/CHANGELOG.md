@@ -1,27 +1,12 @@
-# Changelog
+MIT License
 
-All notable changes to this project will be documented here.
+Copyright (c) 2026 Eric Allard
 
-## [1.0.0] - 2026-07-18
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software.
 
-### Added
-
-- ESPHome external component for ECOLO-80
-- Passive packet receiver on GPIO4
-- 2N3904 open-collector transmitter on GPIO18
-- Power ON/OFF control with acknowledgement
-- Temperature Up and Temperature Down controls
-- Direct final-target temperature transmission
-- Rapid click grouping
-- Water temperature sensor
-- Target temperature sensor
-- Heating binary sensor
-- Checksum validation
-- Home Assistant entities
-- Production cleanup with diagnostic entities removed
-
-### Known limitations
-
-- Tested on a single ECOLO-80 controller revision
-- Fahrenheit only
-- Defrost and error codes not decoded
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED.
