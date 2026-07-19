@@ -2,6 +2,8 @@
 
 # Smart-TTI-Ecolo-80
 
+
+
 ### Reverse-engineered ESPHome Integration for TTI ECOLO Pool Heat Pumps
 
 ![ESPHome](https://img.shields.io/badge/ESPHome-Compatible-blue)
@@ -27,39 +29,51 @@ Unlike relay-based solutions, this integration communicates with the original co
 The protocol was completely reverse engineered from scratch using a logic analyzer and custom ESPHome decoding software.
 
 ---
+## ⚠️ Compatibility
 
-# Features
+This project is currently compatible **ONLY** with TTI ECOLO heat pumps equipped with the following controller board:
 
-✅ Power ON / OFF
+**Manufacturer**
 
-✅ Water temperature
+GUANGDONG CHICO
 
-✅ Target temperature
+**Main Board**
 
-✅ Heating status
+CC207S-V2.1
 
-✅ Temperature Up
+<img width="847" height="652" alt="image" src="https://github.com/user-attachments/assets/1c89b98d-0086-4ebb-b3b3-2b20d83cb3ea" />
 
-✅ Temperature Down
 
-✅ Native Home Assistant entities
+Other controller revisions may use a different communication protocol and are **not supported** by this release.
 
-✅ ESPHome External Component
+If you own another controller revision and would like to help add support, protocol captures are welcome.
 
-✅ Packet checksum validation
+## Features
 
-✅ Reliable two-way communication
-
-✅ Command acknowledgement
-
-✅ Factory keypad remains fully operational
+- ✅ Native ON/OFF power switch
+- ✅ Current water temperature
+- ✅ Target water temperature
+- ✅ Heating Status binary sensor
+- ✅ Temperature control (70°F–99°F)
+- ✅ ECOLO Model selector
+- ✅ Estimated current consumption (A)
+- ✅ Estimated power consumption (W)
+- ✅ Daily energy consumption (kWh)
+- ✅ Total energy consumption (kWh)
+- ✅ Persistent settings stored in ESP32 flash
+- ✅ Automatic checksum verification
+- ✅ Automatic command acknowledgement
+- ✅ Immediate Home Assistant updates
+- ✅ Automatic 5-second telemetry refresh
+- ✅ Full compatibility with the factory keypad
+- ✅ OTA firmware updates
+- ✅ No cloud required
 
 ---
 
 # Home Assistant
 
-<img width="1511" height="772" alt="image" src="https://github.com/user-attachments/assets/bbf744ae-6186-49f5-8c80-520bfe2fae96" />
-
+<img width="1443" height="837" alt="image" src="https://github.com/user-attachments/assets/17a68365-fa28-4505-b33b-f47ac8d7a59a" />
 
 The integration creates the following entities:
 
@@ -204,23 +218,24 @@ Current release
 
 **Version 1.0.0**
 
-### Implemented
+## Current Capabilities
 
-- Power Control
-- Water Temperature
-- Target Temperature
-- Heating Detection
-- Temperature Controls
-- Home Assistant Integration
-- ESPHome External Component
-
-### Planned
-
-- Defrost Detection
-- Error Code Decoding
-- Fan Status
-- Compressor Status
-- Additional ECOLO Models
+| Function | Status |
+|----------|:------:|
+| Read Water Temperature | ✅ |
+| Read Target Temperature | ✅ |
+| Read Heater Power | ✅ |
+| Read Heating Status | ✅ |
+| Heater ON/OFF | ✅ |
+| Increase Temperature | ✅ |
+| Decrease Temperature | ✅ |
+| Model Selection | ✅ |
+| Current Consumption | ✅ |
+| Power Consumption | ✅ |
+| Daily Energy | ✅ |
+| Total Energy | ✅ |
+| Home Assistant Integration | ✅ |
+| ESPHome External Component | ✅ |
 
 ---
 
