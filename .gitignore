@@ -1,0 +1,13 @@
+.esphome/
+build/
+.pioenvs/
+.piolibdeps/
+secrets.yaml
+__pycache__/
+*.py[cod]
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.logicdata
+*.sal

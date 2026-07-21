@@ -74,7 +74,7 @@ void Ecolo80TemperatureDownButton::press_action() {
 }
 
 void Ecolo80Component::setup() {
-  ESP_LOGCONFIG(TAG, "Setting up ECOLO component v15 final with 5-second consumption refresh...");
+  ESP_LOGCONFIG(TAG, "Setting up Smart-TTI-Ecolo-80 v2.0.0 production release...");
 
   if (this->model_select_ != nullptr) {
     this->model_preference_ =
@@ -147,7 +147,7 @@ void Ecolo80Component::setup() {
 }
 
 void Ecolo80Component::dump_config() {
-  ESP_LOGCONFIG(TAG, "ECOLO integration v15 final:");
+  ESP_LOGCONFIG(TAG, "Smart-TTI-Ecolo-80 v2.0.0:");
   ESP_LOGCONFIG(TAG, "  Temperature click collection: 1200 ms");
   ESP_LOGCONFIG(TAG, "  Temperature TX copies: 2 at 500 ms spacing");
   ESP_LOGCONFIG(TAG, "  Temperature ACK timeout: 9000 ms");

@@ -2,293 +2,235 @@
 
 # Smart-TTI-Ecolo-80
 
+### ESPHome and Home Assistant integration for TTI ECOLO pool heat pumps
 
+![Version](https://img.shields.io/badge/version-v2.0.0-success)
+![Status](https://img.shields.io/badge/status-production%20release-brightgreen)
+![ESPHome](https://img.shields.io/badge/ESPHome-external%20component-000000)
+![Home Assistant](https://img.shields.io/badge/Home%20Assistant-compatible-41BDF5)
+![ESP32](https://img.shields.io/badge/ESP32-supported-E7352C)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-### Reverse-engineered ESPHome Integration for TTI ECOLO Pool Heat Pumps
+Reliable two-way communication with the original TTI ECOLO controller bus while keeping the factory keypad operational.
 
-![ESPHome](https://img.shields.io/badge/ESPHome-Compatible-blue)
-![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Compatible-41BDF5)
-![ESP32](https://img.shields.io/badge/ESP32-Supported-red)
-![License](https://img.shields.io/badge/License-MIT-green)
-![Version](https://img.shields.io/badge/Version-v1.0.0-success)
-
-Reliable two-way communication between **TTI ECOLO** pool heat pumps and **Home Assistant** using an **ESP32** running **ESPHome**.
-
-Developed and reverse engineered by **Eric Allard**
+**Reverse engineered and developed by Eric Allard**
 
 </div>
 
 ---
 
-# Overview
+![Smart TTI ECOLO Home Assistant dashboard](docs/images/home-assistant-dashboard.png)
 
-This project provides a complete ESPHome external component that communicates directly with the proprietary serial bus used by the **TTI ECOLO** series pool heat pumps.
+## Compatibility
 
-Unlike relay-based solutions, this integration communicates with the original controller exactly like the factory keypad, allowing Home Assistant to control the heater while keeping the factory control panel fully functional.
+> **This project is compatible only with TTI ECOLO heat pumps equipped with the following main controller board:**
+>
+> **Manufacturer:** GUANGDONG CHICO  
+> **Main board model:** CC207S-V2.1
+>
+> Other controller revisions may use a different communication protocol and are not supported by this release.
 
-The protocol was completely reverse engineered from scratch using a logic analyzer and custom ESPHome decoding software.
+## Overview
 
----
-## ⚠️ Compatibility
+Smart-TTI-Ecolo-80 is a custom ESPHome external component that connects an ESP32 directly to the proprietary controller bus used by compatible TTI ECOLO pool heat pumps.
 
-This project is currently compatible **ONLY** with TTI ECOLO heat pumps equipped with the following controller board:
-
-**Manufacturer**
-
-GUANGDONG CHICO
-
-**Main Board**
-
-CC207S-V2.1
-
-<img width="847" height="652" alt="image" src="https://github.com/user-attachments/assets/1c89b98d-0086-4ebb-b3b3-2b20d83cb3ea" />
-
-
-Other controller revisions may use a different communication protocol and are **not supported** by this release.
-
-If you own another controller revision and would like to help add support, protocol captures are welcome.
+Unlike a relay-only modification, it reads the heater's own status frames and transmits valid keypad-style commands. Home Assistant receives native entities for power, temperatures, heating state, model selection, current consumption, power consumption, and estimated energy use.
 
 ## Features
 
-- ✅ Native ON/OFF power switch
-- ✅ Current water temperature
-- ✅ Target water temperature
-- ✅ Heating Status binary sensor
-- ✅ Temperature control (70°F–99°F)
-- ✅ ECOLO Model selector
-- ✅ Estimated current consumption (A)
-- ✅ Estimated power consumption (W)
-- ✅ Daily energy consumption (kWh)
-- ✅ Total energy consumption (kWh)
-- ✅ Persistent settings stored in ESP32 flash
-- ✅ Automatic checksum verification
-- ✅ Automatic command acknowledgement
-- ✅ Immediate Home Assistant updates
-- ✅ Automatic 5-second telemetry refresh
-- ✅ Full compatibility with the factory keypad
-- ✅ OTA firmware updates
-- ✅ No cloud required
+- Native power ON/OFF switch
+- Current water temperature
+- Target temperature
+- Temperature Up and Down controls
+- Heating ON/OFF binary sensor
+- ECOLO model dropdown in Home Assistant
+- Estimated current consumption
+- Estimated running power
+- Daily and cumulative estimated energy
+- Immediate updates when heating or model changes
+- Automatic consumption refresh every five seconds
+- Checksum validation and transmit-echo verification
+- Heater acknowledgement for control commands
+- Factory keypad remains functional
+- Model selection saved in ESP32 flash
+- OTA firmware updates
+- No cloud dependency
 
----
+## Supported models
 
-# Home Assistant
+Choose the installed unit from the **Ecolo Model** dropdown:
 
-<img width="1443" height="837" alt="image" src="https://github.com/user-attachments/assets/17a68365-fa28-4505-b33b-f47ac8d7a59a" />
+| Model | Rated operating current | Estimated running power at 240 V |
+|---|---:|---:|
+| ECOLO 50 | 10 A | 2.40 kW |
+| ECOLO 65 | 12 A | 2.88 kW |
+| ECOLO 80 | 18 A | 4.32 kW |
+| ECOLO 100 | 21 A | 5.04 kW |
+| ECOLO 120 | 24 A | 5.76 kW |
 
-The integration creates the following entities:
+Estimated power is calculated as:
 
-| Entity | Description |
-|----------|------------|
-| Power | Turns the heater ON / OFF |
-| Water Temperature | Current pool water temperature |
-| Target Temperature | Desired water temperature |
-| Heating | Indicates when the heater is actively heating |
-| Temperature Up | Raises target temperature |
-| Temperature Down | Lowers target temperature |
-
----
-
-# Hardware
-
-Required components
-
-- ESP32 DevKitC
-- 2N3904 transistor
-- DROK Buck Converter (5V)
-- 4.7k resistor
-- 10k resistor
-- 22k resistor
-- 100k resistor
-- Fuse
-- Wiring
-
----
-
-# Wiring
-<img width="1536" height="1024" alt="ecolo-80-wiring" src="https://github.com/user-attachments/assets/4bab961d-844f-40cc-94db-a444fdcc5be4" />
-
-## Power
-
-```
-Heater Brown (+16V)
-        │
-       Fuse
-        │
-    DROK IN+
-
-Heater Yellow
-        │
-    DROK IN-
-
-DROK OUT+
-        │
- ESP32 5V
-
-DROK OUT-
-        │
- ESP32 GND
+```text
+240 V × rated operating current
 ```
 
----
+Actual consumption may vary with line voltage, startup, defrost, ambient conditions, and equipment condition.
 
-## Receive
+## Home Assistant entities
 
+| Entity | Purpose |
+|---|---|
+| Ecolo Power | Heater ON/OFF |
+| Ecolo Temperature Up | Raises target temperature |
+| Ecolo Temperature Down | Lowers target temperature |
+| Ecolo Target Temperature | Current target |
+| Ecolo Water Temperature | Current water temperature |
+| Ecolo Heating | ON while heating, OFF while idle |
+| Ecolo Model | Selects ECOLO 50/65/80/100/120 |
+| Ecolo Current Consumption | Estimated running current |
+| Ecolo Power Consumption | Estimated running watts |
+| Ecolo Energy Today | Estimated kWh since midnight |
+| Ecolo Energy Total | Restored cumulative estimated kWh |
+
+Current and power update immediately when the heating state changes, immediately when the selected model changes, and every five seconds while the ESP32 is online.
+
+## Current capabilities
+
+| Function | Status |
+|---|:---:|
+| Read water temperature | ✅ |
+| Read target temperature | ✅ |
+| Read heater power state | ✅ |
+| Read heating state | ✅ |
+| Turn heater ON | ✅ |
+| Turn heater OFF | ✅ |
+| Increase temperature | ✅ |
+| Decrease temperature | ✅ |
+| Model selection | ✅ |
+| Estimated current consumption | ✅ |
+| Estimated power consumption | ✅ |
+| Estimated daily energy | ✅ |
+| Estimated total energy | ✅ |
+| Home Assistant integration | ✅ |
+| ESPHome external component | ✅ |
+
+## Hardware
+
+- ESP32 DevKitC or compatible ESP32 board
+- 2N3904 NPN transistor
+- DROK adjustable buck converter
+- 4.7 kΩ resistor
+- 10 kΩ resistor
+- 22 kΩ resistor
+- 100 kΩ resistor
+- Inline fuse
+- Suitable wiring and insulation
+
+## Wiring
+
+![ECOLO ESP32 wiring diagram](docs/images/wiring-diagram-16x9.png)
+
+### Power
+
+```text
+Heater Brown (+16–17 V DC) -> Fuse -> DROK IN+
+Heater Yellow (GND) --------------> DROK IN-
+
+DROK OUT+ adjusted to 5.0 V ------> ESP32 5V
+DROK OUT- ------------------------> ESP32 GND
 ```
-Heater Blue
-      │
-     10k
-      │──────────── GPIO4
-      │
-     22k
-      │
-     GND
+
+### Receive
+
+```text
+Heater Blue ---- 10 kΩ ----+---- ESP32 GPIO4
+                           |
+                          22 kΩ
+                           |
+                          GND
 ```
 
----
+### Transmit
 
-## Transmit
+```text
+ESP32 GPIO18 ---- 4.7 kΩ ----+---- 2N3904 Base
+                              |
+                            100 kΩ
+                              |
+                             GND
 
-```
-GPIO18
-   │
- 4.7k
-   │
- Base
-   │
-100k
-   │
- GND
-
-Emitter → GND
-
-Collector → Heater Blue
+2N3904 Emitter -------------------- GND
+2N3904 Collector ------------------ Heater Blue
 ```
 
-The transistor acts as an **open-collector driver**, matching the behavior of the original keypad.
+Verify the pinout of the exact 2N3904 package being used.
 
----
+## Installation
 
-# Installation
+1. Copy `esphome/my_components/ecolo80/` to:
 
-Copy the component into:
-
-```
+```text
 /config/esphome/my_components/ecolo80/
 ```
 
-Copy the supplied YAML configuration into your ESPHome folder.
+2. Copy `esphome/ecolo-80.yaml` to the ESPHome configuration directory.
+3. Review Wi-Fi, API, OTA, device naming, GPIO4 RX, and GPIO18 TX.
+4. Validate, compile, and install.
+5. Add the discovered ESPHome device to Home Assistant.
+6. Select the correct heater using **Ecolo Model**.
 
-Compile and upload to the ESP32.
+The model selection is stored in ESP32 flash and restored after reboot.
 
-Home Assistant will automatically discover the device.
+## Protocol highlights
 
----
+Observed frames contain 14 bytes.
 
-# Protocol
+- Packet A byte 2: encoded target temperature
+- Packet A byte 7:
+  - `0x7C`: OFF
+  - `0x7E`: ON
+- Packet B byte 10, bit `0x08`: heating
+  - `0x10`: idle
+  - `0x18`: heating startup
+  - `0x58`: heating/running
+- Final byte: checksum
 
-The heater communicates using three different frame types.
+See [docs/protocol.md](docs/protocol.md).
 
-## Packet A
+## Safety
 
-Status information
+This project connects to a proprietary heater control bus.
 
-- Power state
-- Target temperature
-- Status flags
+- Disconnect power before changing wiring.
+- Fuse the supply feeding the buck converter.
+- Verify 5.0 V output before connecting the ESP32.
+- Never power the ESP32 directly from the heater supply.
+- Verify transistor pinout and all common-ground connections.
+- High-voltage heater wiring should be handled by a qualified person.
+- Use this project at your own risk.
 
-## Packet B
+## Project status
 
-Operating information
+**Smart-TTI-Ecolo-80 v2.0.0 is the first stable production release.**
 
-- Water temperature
-- Heating state
-- Runtime flags
+It provides the complete supported feature set for compatible TTI ECOLO heat pumps using the **GUANGDONG CHICO CC207S-V2.1** main board.
 
-## Keypad Frame
+## Author
 
-Transmitted by the ESP32 to emulate the factory keypad.
+**Eric Allard**
 
-Every transmitted packet is verified before being acknowledged.
+- Protocol reverse engineering
+- Hardware interface development
+- ESPHome component
+- Home Assistant integration
+- ECOLO-80 testing
 
----
+## Acknowledgements
 
-# Project Status
+Special thanks to the ESPHome and Home Assistant communities for providing the open-source ecosystem that made this project possible.
 
-Current release
+## License
 
-**Version 1.0.0**
+MIT License. See [LICENSE](LICENSE).
 
-## Current Capabilities
-
-| Function | Status |
-|----------|:------:|
-| Read Water Temperature | ✅ |
-| Read Target Temperature | ✅ |
-| Read Heater Power | ✅ |
-| Read Heating Status | ✅ |
-| Heater ON/OFF | ✅ |
-| Increase Temperature | ✅ |
-| Decrease Temperature | ✅ |
-| Model Selection | ✅ |
-| Current Consumption | ✅ |
-| Power Consumption | ✅ |
-| Daily Energy | ✅ |
-| Total Energy | ✅ |
-| Home Assistant Integration | ✅ |
-| ESPHome External Component | ✅ |
-
----
-
-# Tested Hardware
-
-Successfully tested on
-
-- TTI ECOLO-80
-
-Additional testing on ECOLO-50 and ECOLO-100 is welcome.
-
----
-
-# Contributing
-
-Contributions are welcome.
-
-Useful contributions include:
-
-- Testing on additional ECOLO models
-- Error code captures
-- Defrost captures
-- Documentation improvements
-- Hardware improvements
-
----
-
-# License
-
-MIT License
-
----
-
-# Acknowledgements
-
-Special thanks to the Home Assistant and ESPHome communities for providing the excellent open-source ecosystem that made this project possible.
-
----
-
-# Author
-
-## Eric Allard
-
-Reverse engineering
-
-Protocol decoding
-
-ESPHome component development
-
-Hardware interface design
-
-Home Assistant integration
-
----
-
-If this project helps you, please consider giving it a ⭐ on GitHub.
+If this project helps you, consider starring the repository.
