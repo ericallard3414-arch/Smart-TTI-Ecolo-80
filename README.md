@@ -19,8 +19,6 @@ Reliable two-way communication with the original TTI ECOLO controller bus while 
 
 ---
 
-![Smart TTI ECOLO Home Assistant dashboard](docs/images/home-assistant-dashboard.png)
-
 ## Compatibility
 
 > **This project is compatible only with TTI ECOLO heat pumps equipped with the following main controller board:**
@@ -29,6 +27,10 @@ Reliable two-way communication with the original TTI ECOLO controller bus while 
 > **Main board model:** CC207S-V2.1
 >
 > Other controller revisions may use a different communication protocol and are not supported by this release.
+>
+> <img width="1069" height="800" alt="CC207Sv2" src="https://github.com/user-attachments/assets/345ef7ba-e4b0-4a5c-9c0c-35a2146a567c" />
+
+
 
 ## Overview
 
@@ -77,6 +79,9 @@ Estimated power is calculated as:
 Actual consumption may vary with line voltage, startup, defrost, ambient conditions, and equipment condition.
 
 ## Home Assistant entities
+
+<img width="1523" height="847" alt="image" src="https://github.com/user-attachments/assets/97a52200-99e8-4249-b499-cf07b682fbf3" />
+
 
 | Entity | Purpose |
 |---|---|
